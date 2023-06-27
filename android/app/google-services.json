@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "683225156478",
+    "project_id": "me-note-app",
+    "storage_bucket": "me-note-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683225156478:android:9231129d8b939d6885412f",
+        "android_client_info": {
+          "package_name": "com.example.me_notes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683225156478-e4jdm5nrr08ih5k3uoe2r9pbko3olbcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACTksA9HHkGucKEA7YBLqcJ0UDBW9ucqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683225156478-e4jdm5nrr08ih5k3uoe2r9pbko3olbcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683225156478-lhv9nakcbtcl2cvs13s4cs3j9ee96kbm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.meNotesApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683225156478:android:98eefb7d02534d3585412f",
+        "android_client_info": {
+          "package_name": "com.example.menotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683225156478-e4jdm5nrr08ih5k3uoe2r9pbko3olbcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACTksA9HHkGucKEA7YBLqcJ0UDBW9ucqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683225156478-e4jdm5nrr08ih5k3uoe2r9pbko3olbcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683225156478-lhv9nakcbtcl2cvs13s4cs3j9ee96kbm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.meNotesApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
