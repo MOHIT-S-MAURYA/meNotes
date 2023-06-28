@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:menotes/view/constants/routes.dart';
+import 'package:menotes/constants/routes.dart';
 
 import '../utilities/show_error_dialog.dart';
 
@@ -75,6 +75,7 @@ class _RegisterViewState extends State<RegisterView> {
                   );
                   await FirebaseAuth.instance.currentUser!
                       .sendEmailVerification();
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pushNamed(
                     verifyEmailRoute,
                   );
