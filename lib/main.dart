@@ -5,7 +5,7 @@ import 'package:menotes/firebase_options.dart';
 import 'package:menotes/view/login_view.dart';
 import 'package:menotes/view/register_view.dart';
 import 'package:menotes/view/verify_email_view.dart';
-import 'dart:developer' as devtools show log;
+// import 'dart:developer' as devtools show log;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +21,7 @@ void main() {
       routes: {
         '/Login/': (context) => const LoginView(),
         '/Register/': (context) => const RegisterView(),
+        '/notes/': (context) => const NotesView(),
       },
     ),
   );
@@ -79,6 +80,7 @@ class _NotesViewState extends State<NotesView> {
                     final shouldLogout = await showLogOutDialog(context);
                     if (shouldLogout) {
                       await FirebaseAuth.instance.signOut();
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         "/Login/",
                         (_) => false,
