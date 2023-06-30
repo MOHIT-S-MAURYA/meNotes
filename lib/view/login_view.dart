@@ -1,12 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-// import 'dart:developer' as devtools show log;
-
 import 'package:menotes/constants/routes.dart';
-
-import '../utilities/show_error_dialog.dart';
+import 'package:menotes/services/auth/auth_exceptions.dart';
+import 'package:menotes/services/auth/auth_service.dart';
+import 'package:menotes/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -72,15 +68,25 @@ class _LoginViewState extends State<LoginView> {
                 final email = _email.text;
                 final password = _password.text;
 
+                // print('email: $email');
+                // print('password: $password');
+
                 try {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  await AuthService.firebase().login(
                     email: email,
                     password: password,
                   );
+                  // print(
+                  //   "logged in as "$user.email,
+                  // );
 
-                  final user = FirebaseAuth.instance.currentUser;
+                  final user = AuthService.firebase().currentUser;
 
-                  if (user?.emailVerified ?? false) {
+                  // print('user: $user');
+
+                  // print(user?.isEmailVerified ?? false);
+
+                  if (user?.isEmailVerified ?? false) {
                     //verified user
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       notesRoute,
@@ -93,32 +99,25 @@ class _LoginViewState extends State<LoginView> {
                       (route) => false,
                     );
                   }
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
-                    await showErrorDialog(
-                      context,
-                      "No user found for that email.",
-                    );
-                  } else if (e.code == 'wrong-password') {
-                    await showErrorDialog(
-                      context,
-                      "Wrong password provided for that user.",
-                    );
-                  } else if (e.code == 'user-disabled') {
-                    await showErrorDialog(
-                      context,
-                      "The user has been disabled.",
-                    );
-                  } else {
-                    await showErrorDialog(
-                      context,
-                      "Error: ${e.code}",
-                    );
-                  }
-                } catch (e) {
+                } on UserNotFoundAuthException {
                   await showErrorDialog(
                     context,
-                    "Error: ${e.toString()}",
+                    "No user found for that email.",
+                  );
+                } on WrongPasswordAuthException {
+                  await showErrorDialog(
+                    context,
+                    "Wrong credentials provided for that user.",
+                  );
+                } on UserDisabledAuthException {
+                  await showErrorDialog(
+                    context,
+                    "The user has been disabled.",
+                  );
+                } on GenericAuthException {
+                  await showErrorDialog(
+                    context,
+                    "Authentication Error",
                   );
                 }
               },
