@@ -88,12 +88,14 @@ class _LoginViewState extends State<LoginView> {
 
                   if (user?.isEmailVerified ?? false) {
                     //verified user
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       notesRoute,
                       (route) => false,
                     );
                   } else {
                     //unverified user
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       verifyEmailRoute,
                       (route) => false,
