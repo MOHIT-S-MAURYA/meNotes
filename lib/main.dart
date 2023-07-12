@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:menotes/constants/routes.dart';
 import 'package:menotes/services/auth/auth_service.dart';
 import 'package:menotes/view/login_view.dart';
-import 'package:menotes/view/notes_view.dart';
+import 'package:menotes/view/notes/new_notes_view.dart';
+import 'package:menotes/view/notes/notes_view.dart';
 import 'package:menotes/view/register_view.dart';
 import 'package:menotes/view/verify_email_view.dart';
 // import 'dart:developer' as devtools show log;
@@ -23,6 +24,7 @@ void main() {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
+        newNotesRoute: (context) => const NewNoteView(),
       },
     ),
   );
