@@ -25,6 +25,8 @@ class NotesService {
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
+  // get or create user
+
   Future<DatabaseUser?> getOrCreateUser({required String email}) async {
     try {
       final user = await getUser(email: email);
@@ -37,6 +39,8 @@ class NotesService {
     }
   }
 
+  // cache notes
+
   Future<void> _cacheNotes() async {
     final allNotes = await getAllNote();
 
@@ -44,6 +48,8 @@ class NotesService {
 
     _notesStreamController.add(_notes);
   }
+
+// update notes
 
   Future<DatabaseNote> updateNotes({
     required DatabaseNote note,
@@ -53,26 +59,32 @@ class NotesService {
 
     final db = _getDatabaseOrThrow();
 
-// make sure note is present in the database
+    // make sure note is present in the database
     await getNote(id: note.id);
 
-// update database
-
-    final updatesCount = await db.update(noteTable, {
-      textColumn: text,
-      isSyncedWithCloudColumn: 0,
-    });
+    // update database
+    final updatesCount = await db.update(
+      noteTable,
+      {
+        textColumn: text,
+        isSyncedWithCloudColumn: 0,
+      },
+      where: '$idColumn = ?',
+      whereArgs: [note.id],
+    );
 
     if (updatesCount == 0) {
       throw CouldNotUpdateNote();
     } else {
-      final updateNote = await getNote(id: note.id);
-      _notes.removeWhere((note) => note.id == updateNote.id);
-      _notes.add(updateNote);
+      final updatedNote = await getNote(id: note.id);
+      _notes.removeWhere((note) => note.id == updatedNote.id);
+      _notes.add(updatedNote);
       _notesStreamController.add(_notes);
-      return updateNote;
+      return updatedNote;
     }
   }
+
+// get all notes
 
   Future<Iterable<DatabaseNote>> getAllNote() async {
     await _ensureDbIsOpen();
@@ -81,6 +93,8 @@ class NotesService {
 
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
+
+// get note
 
   Future<DatabaseNote> getNote({required int id}) async {
     await _ensureDbIsOpen();
@@ -103,6 +117,8 @@ class NotesService {
     }
   }
 
+// delete all note
+
   Future<int> deleteAllNote() async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
@@ -111,6 +127,8 @@ class NotesService {
     _notesStreamController.add(_notes);
     return numberOfDeletions;
   }
+
+// delete note
 
   Future<void> deleteNote({required int id}) async {
     await _ensureDbIsOpen();
@@ -130,6 +148,8 @@ class NotesService {
     }
   }
 
+// create note
+
   Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
@@ -142,14 +162,14 @@ class NotesService {
     const text = '';
     // create note
 
-    final noteId = db.insert(noteTable, {
+    final noteId = await db.insert(noteTable, {
       userIdColumn: owner.id,
       textColumn: text,
       isSyncedWithCloudColumn: 1,
     });
 
     final note = DatabaseNote(
-      id: noteId as int,
+      id: noteId,
       userId: owner.id,
       text: text,
       isSyncedWithCloud: true,
@@ -158,6 +178,8 @@ class NotesService {
     _notesStreamController.add(_notes);
     return note;
   }
+
+// get user
 
   Future<DatabaseUser?> getUser({required String email}) async {
     await _ensureDbIsOpen();
@@ -174,6 +196,8 @@ class NotesService {
       return DatabaseUser.fromRow(results.first);
     }
   }
+
+// create user
 
   Future<DatabaseUser> createUser({required String email}) async {
     await _ensureDbIsOpen();
@@ -198,6 +222,8 @@ class NotesService {
     );
   }
 
+// delete user
+
   Future<void> deleteUser({required String email}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
@@ -212,6 +238,8 @@ class NotesService {
     }
   }
 
+// get database
+
   Database _getDatabaseOrThrow() {
     final db = _db;
     if (db == null) {
@@ -220,6 +248,8 @@ class NotesService {
       return db;
     }
   }
+
+// close
 
   Future<void> close() async {
     final db = _db;
@@ -231,6 +261,8 @@ class NotesService {
     }
   }
 
+// ensure databse is open
+
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
@@ -238,6 +270,8 @@ class NotesService {
       // do nothing
     }
   }
+
+// open database
 
   Future<void> open() async {
     if (_db != null) {
@@ -325,7 +359,7 @@ const userTable = 'user';
 const idColumn = "id";
 const emailColumn = "email";
 const userIdColumn = "userId";
-const textColumn = "userId";
+const textColumn = "text";
 const isSyncedWithCloudColumn = "isSyncedWithCloud";
 const createNoteTable = '''  
 CREATE TABLE IF NOT EXISTS "note" (
